@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">🔧 Admin Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <h6>Total Predictions</h6>
+                <h2 class="mb-0">{{ stats.total }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body text-center">
+                <h6>Eligible</h6>
+                <h2 class="mb-0">{{ stats.eligible }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-danger text-white shadow">
+            <div class="card-body text-center">
+                <h6>Not Eligible</h6>
+                <h2 class="mb-0">{{ stats.not_eligible }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body text-center">
+                <h6>Average Score</h6>
+                <h2 class="mb-0">{{ stats.avg_score }}%</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-body text-center">
+                <h4>📜 View History</h4>
+                <p class="text-muted">See all past predictions</p>
+                <a href="/history" class="btn btn-primary">Open History</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-body text-center">
+                <h4>📊 Analytics</h4>
+                <p class="text-muted">View charts and trends</p>
+                <a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

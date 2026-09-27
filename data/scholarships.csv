@@ -1,0 +1,15 @@
+id,name,provider,education,category,gender,disability,income_limit,min_marks,amount,portal
+1,National Scholarship for Post Graduate Studies,UGC / NSP,PG,Any,Any,Any,600000,60,Scheme-specific,https://scholarships.gov.in
+2,PG Scholarship for Professional Courses - SC/ST,UGC,Professional,SC,Any,Any,800000,55,78000,https://scholarships.gov.in
+3,PG Scholarship for Professional Courses - SC/ST,UGC,Professional,ST,Any,Any,800000,55,78000,https://scholarships.gov.in
+4,PG Indira Gandhi Scholarship for Single Girl Child,UGC,PG,Any,Female,Any,600000,60,36200,https://scholarships.gov.in
+5,PG Scholarship for University Rank Holders,UGC,PG,Any,Any,Any,600000,75,37200,https://scholarships.gov.in
+6,AICTE Pragati Scholarship,AICTE,Technical,Any,Female,Any,800000,60,30000,https://aicte-india.org
+7,AICTE Saksham Scholarship,AICTE,Technical,Any,Any,Yes,800000,55,30000,https://aicte-india.org
+8,PM-USP Central Sector Scholarship,Dept of Higher Education / NSP,UG,Any,Any,Any,450000,70,Scheme-specific,https://scholarships.gov.in
+9,PM YASASVI - Top Class Education,OBC / EBC / DNT,UG,OBC,Any,Any,250000,60,Scheme-specific,https://scholarships.gov.in
+10,Post-Matric Scholarship for Students with Disabilities,DEPwD / NSP,UG,Any,Any,Yes,250000,50,Scheme-specific,https://scholarships.gov.in
+11,Central Sector Scholarship - Top Class Education for SC,Social Justice / NSP,UG,SC,Any,Any,250000,60,Scheme-specific,https://scholarships.gov.in
+12,Central Sector Scholarship - Top Class Education for ST,Social Justice / NSP,UG,ST,Any,Any,250000,60,Scheme-specific,https://scholarships.gov.in
+13,AICTE Pragati Scholarship,AICTE,Professional,Any,Female,Any,800000,60,30000,https://aicte-india.org
+14,AICTE Saksham Scholarship,AICTE,Professional,Any,Any,Yes,800000,55,30000,https://aicte-india.org

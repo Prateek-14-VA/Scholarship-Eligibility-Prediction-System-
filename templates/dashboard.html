@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">📊 Analytics Dashboard</h2>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body text-center">
+                <h6>Total Students</h6>
+                <h2 class="mb-0">{{ summary.total }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body text-center">
+                <h6>Eligible</h6>
+                <h2 class="mb-0">{{ summary.eligible }}</h2>
+                <small>{{ summary.eligible_pct }}%</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card bg-danger text-white shadow">
+            <div class="card-body text-center">
+                <h6>Not Eligible</h6>
+                <h2 class="mb-0">{{ summary.not_eligible }}</h2>
+                <small>{{ (100 - summary.eligible_pct)|round(1) }}%</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 1 -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Eligibility by Category</strong>
+            </div>
+            <div class="card-body">
+                <div id="chartCategory"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Eligibility by Education Level</strong>
+            </div>
+            <div class="card-body">
+                <div id="chartEducation"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2 -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Marks Distribution vs Eligibility</strong>
+            </div>
+            <div class="card-body">
+                <div id="chartMarks"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Income Brackets vs Eligibility</strong>
+            </div>
+            <div class="card-body">
+                <div id="chartIncome"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 3 -->
+<div class="row mb-4">
+    <div class="col-md-6 mb-3 mx-auto">
+        <div class="card shadow h-100">
+            <div class="card-header bg-secondary text-white">
+                <strong>Eligibility by Gender</strong>
+            </div>
+            <div class="card-body">
+                <div id="chartGender"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Load Plotly from CDN -->
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+<script>
+    const data = {{ chart_data|safe }};
+
+    const baseLayout = {
+        margin: { t: 20, r: 20, b: 40, l: 50 },
+        height: 320,
+        font: { family: 'Segoe UI', size: 12 },
+        showlegend: true,
+        legend: { orientation: 'h', y: -0.2 }
+    };
+
+    // Chart 1: Category
+    Plotly.newPlot('chartCategory', [
+        {
+            x: data.category.categories,
+            y: data.category.eligible,
+            name: 'Eligible',
+            type: 'bar',
+            marker: { color: '#198754' }
+        },
+        {
+            x: data.category.categories,
+            y: data.category.not_eligible,
+            name: 'Not Eligible',
+            type: 'bar',
+            marker: { color: '#dc3545' }
+        }
+    ], { ...baseLayout, barmode: 'group' });
+
+    // Chart 2: Education
+    Plotly.newPlot('chartEducation', [
+        {
+            x: data.education.levels,
+            y: data.education.eligible,
+            name: 'Eligible',
+            type: 'bar',
+            marker: { color: '#198754' }
+        },
+        {
+            x: data.education.levels,
+            y: data.education.not_eligible,
+            name: 'Not Eligible',
+            type: 'bar',
+            marker: { color: '#dc3545' }
+        }
+    ], { ...baseLayout, barmode: 'group' });
+
+    // Chart 3: Marks
+    Plotly.newPlot('chartMarks', [
+        {
+            x: data.marks.labels,
+            y: data.marks.eligible,
+            name: 'Eligible',
+            type: 'bar',
+            marker: { color: '#198754' }
+        },
+        {
+            x: data.marks.labels,
+            y: data.marks.not_eligible,
+            name: 'Not Eligible',
+            type: 'bar',
+            marker: { color: '#dc3545' }
+        }
+    ], { ...baseLayout, barmode: 'group' });
+
+    // Chart 4: Income
+    Plotly.newPlot('chartIncome', [
+        {
+            x: data.income.labels,
+            y: data.income.eligible,
+            name: 'Eligible',
+            type: 'bar',
+            marker: { color: '#198754' }
+        },
+        {
+            x: data.income.labels,
+            y: data.income.not_eligible,
+            name: 'Not Eligible',
+            type: 'bar',
+            marker: { color: '#dc3545' }
+        }
+    ], { ...baseLayout, barmode: 'group' });
+
+    // Chart 5: Gender
+    Plotly.newPlot('chartGender', [
+        {
+            x: data.gender.genders,
+            y: data.gender.eligible,
+            name: 'Eligible',
+            type: 'bar',
+            marker: { color: '#198754' }
+        },
+        {
+            x: data.gender.genders,
+            y: data.gender.not_eligible,
+            name: 'Not Eligible',
+            type: 'bar',
+            marker: { color: '#dc3545' }
+        }
+    ], { ...baseLayout, barmode: 'group' });
+</script>
+
+{% endblock %}

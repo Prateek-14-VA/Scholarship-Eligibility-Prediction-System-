@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}About - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">About This System</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    The Scholarship Eligibility Prediction System uses machine learning
+                    to evaluate student profiles and recommend relevant Indian
+                    scholarship schemes.
+                </p>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">How It Works</h4>
+            </div>
+            <div class="card-body">
+                <ol>
+                    <li><strong>Input:</strong> Enter student details (age, marks, attendance, income, category, etc.)</li>
+                    <li><strong>Prediction:</strong> A trained Random Forest model evaluates eligibility and returns a score</li>
+                    <li><strong>Recommendation:</strong> The system matches the profile to real Indian scholarship schemes (UGC, AICTE, NSP, etc.)</li>
+                    <li><strong>Output:</strong> Get a list of scholarships with award amounts and application links</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">Technology Stack</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Backend</h6>
+                        <ul>
+                            <li>Python 3.10</li>
+                            <li>Pandas, NumPy</li>
+                            <li>Scikit-learn (Random Forest)</li>
+                            <li>Flask 3</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Frontend</h6>
+                        <ul>
+                            <li>HTML5, CSS3</li>
+                            <li>Bootstrap 5</li>
+                            <li>Plotly (charts)</li>
+                            <li>Jinja2 templates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">Eligibility Criteria</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Factor</th>
+                            <th>Typical Requirement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Marks</td><td>≥ 60% (varies by scheme)</td></tr>
+                        <tr><td>Attendance</td><td>≥ 75%</td></tr>
+                        <tr><td>Age</td><td>17–30 years</td></tr>
+                        <tr><td>Income</td><td>≤ ₹2.5L (General), ≤ ₹8L (Reserved)</td></tr>
+                        <tr><td>Category</td><td>All (with priority for SC/ST/OBC/Minority/EWS)</td></tr>
+                        <tr><td>Disability</td><td>Relaxed criteria</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="text-center mb-4">
+            <a href="/" class="btn btn-primary btn-lg px-4">Try It Now →</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

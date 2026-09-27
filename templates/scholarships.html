@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Scholarships - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">📋 All Available Scholarships</h2>
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Scholarship Name</th>
+                        <th>Provider</th>
+                        <th>Education</th>
+                        <th>Category</th>
+                        <th>Income Limit</th>
+                        <th>Min Marks</th>
+                        <th>Amount</th>
+                        <th>Apply</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in scholarships %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ s.name }}</td>
+                        <td>{{ s.provider }}</td>
+                        <td>{{ s.education }}</td>
+                        <td>{{ s.category }}</td>
+                        <td>₹ {{ "{:,}".format(s.income_limit) }}</td>
+                        <td>{{ s.min_marks }}%</td>
+                        <td>{{ s.amount }}</td>
+                        <td>
+                            <a href="{{ s.portal }}" target="_blank"
+                               class="btn btn-sm btn-outline-primary">Apply</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="/" class="btn btn-primary">Check Your Eligibility</a>
+</div>
+
+{% endblock %}

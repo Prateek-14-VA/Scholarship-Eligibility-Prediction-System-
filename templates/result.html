@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Result - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<!-- Student Profile Card -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h4 class="mb-0">Student Profile</h4>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <h5 class="mb-0"><strong>Name:</strong> {{ student.name }}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3"><strong>Age:</strong> {{ student.age }}</div>
+            <div class="col-md-3"><strong>Gender:</strong> {{ student.gender }}</div>
+            <div class="col-md-3"><strong>Category:</strong> {{ student.category }}</div>
+            <div class="col-md-3"><strong>Disability:</strong> {{ student.disability }}</div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"><strong>Education:</strong> {{ student.education }}</div>
+            <div class="col-md-3"><strong>Marks:</strong> {{ student.marks }}%</div>
+            <div class="col-md-3"><strong>Attendance:</strong> {{ student.attendance }}%</div>
+            <div class="col-md-3"><strong>Income:</strong> Rs. {{ "{:,}".format(student.income) }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Prediction Card -->
+<div class="card shadow mb-4 {% if prediction.eligible %}border-success{% else %}border-danger{% endif %}">
+    <div class="card-body text-center">
+        <h2 class="mb-3">
+            {% if prediction.eligible %}
+                <span class="badge bg-success fs-4">✓ Eligible</span>
+            {% else %}
+                <span class="badge bg-danger fs-4">✗ Not Eligible</span>
+            {% endif %}
+        </h2>
+        <p class="mb-0 text-muted">Eligibility Score</p>
+        <h1 class="display-4">{{ prediction.score }}%</h1>
+    </div>
+</div>
+
+<!-- Recommended Scholarships Card -->
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Recommended Scholarships ({{ recommendations|length }})</h4>
+    </div>
+    <div class="card-body">
+
+        {% if recommendations %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Scholarship Name</th>
+                        <th>Provider</th>
+                        <th>Award Amount</th>
+                        <th>Apply</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in recommendations %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ s.name }}</td>
+                        <td>{{ s.provider }}</td>
+                        <td>{{ s.amount_display }}</td>
+                        <td>
+                            <a href="{{ s.portal }}" target="_blank"
+                               class="btn btn-sm btn-outline-primary">Apply</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-info mb-0">
+            <strong>Total Estimated Award:</strong>
+            Rs. {{ "{:,}".format(total) }} per year
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No matching scholarships found for this profile.</p>
+        {% endif %}
+
+    </div>
+</div>
+
+<!-- Bottom Buttons -->
+<div class="text-center mt-4">
+    <a href="/" class="btn btn-secondary">← Check Another Student</a>
+    <button onclick="window.print()" class="btn btn-outline-primary">
+        🖨️ Print / Save as PDF
+    </button>
+</div>
+
+{% endblock %}

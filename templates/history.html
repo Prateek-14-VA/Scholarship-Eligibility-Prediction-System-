@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}History - Scholarship Eligibility System{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📜 Prediction History</h2>
+    <span class="badge bg-primary fs-6">{{ predictions|length }} records</span>
+</div>
+
+{% if predictions %}
+<div class="card shadow">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead class="table-primary">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Category</th>
+                        <th>Education</th>
+                        <th>Marks</th>
+                        <th>Income</th>
+                        <th>Result</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in predictions %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><strong>{{ p.name }}</strong></td>
+                        <td><small>{{ p.created_at.strftime('%d %b %Y, %H:%M') if p.created_at else '-' }}</small></td>
+                        <td>{{ p.age }}</td>
+                        <td>{{ p.gender }}</td>
+                        <td>{{ p.category }}</td>
+                        <td>{{ p.education }}</td>
+                        <td>{{ p.marks }}%</td>
+                        <td>₹ {{ "{:,}".format(p.income) }}</td>
+                        <td>
+                            {% if p.eligible %}
+                                <span class="badge bg-success">Eligible</span>
+                            {% else %}
+                                <span class="badge bg-danger">Not Eligible</span>
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ p.score }}%</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info text-center">
+    <h4>No predictions yet</h4>
+    <p>Submit a student form to see history here.</p>
+    <a href="/" class="btn btn-primary">Check Eligibility</a>
+</div>
+{% endif %}
+
+{% endblock %}
