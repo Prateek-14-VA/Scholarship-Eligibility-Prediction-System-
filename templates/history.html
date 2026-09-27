@@ -4,16 +4,61 @@
 
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>📜 Prediction History</h2>
     <span class="badge bg-primary fs-6">{{ predictions|length }} records</span>
+</div>
+
+<!-- Search & Filter -->
+<div class="card shadow mb-3">
+    <div class="card-body">
+        <form method="GET" action="/history" class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="name" class="form-control"
+                       placeholder="Search by name..."
+                       value="{{ name_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    <option value="General" {% if category_filter == 'General' %}selected{% endif %}>General</option>
+                    <option value="OBC" {% if category_filter == 'OBC' %}selected{% endif %}>OBC</option>
+                    <option value="SC" {% if category_filter == 'SC' %}selected{% endif %}>SC</option>
+                    <option value="ST" {% if category_filter == 'ST' %}selected{% endif %}>ST</option>
+                    <option value="EWS" {% if category_filter == 'EWS' %}selected{% endif %}>EWS</option>
+                    <option value="Minority" {% if category_filter == 'Minority' %}selected{% endif %}>Minority</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="eligible" class="form-select">
+                    <option value="">All Results</option>
+                    <option value="1" {% if eligible_filter == '1' %}selected{% endif %}>Eligible</option>
+                    <option value="0" {% if eligible_filter == '0' %}selected{% endif %}>Not Eligible</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </form>
+
+        <div class="mt-2 text-end">
+            <a href="/history" class="btn btn-sm btn-outline-secondary">Reset</a>
+            <a href="/export_csv" class="btn btn-sm btn-outline-success">⬇ Export CSV</a>
+            <form action="/clear_history" method="POST" class="d-inline"
+                  onsubmit="return confirm('Delete ALL history? This cannot be undone.');">
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    🗑 Clear All
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% if predictions %}
 <div class="card shadow">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped align-middle">
                 <thead class="table-primary">
                     <tr>
                         <th>#</th>
@@ -27,6 +72,7 @@
                         <th>Income</th>
                         <th>Result</th>
                         <th>Score</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,6 +95,15 @@
                             {% endif %}
                         </td>
                         <td><strong>{{ p.score }}%</strong></td>
+                        <td>
+                            <form action="/delete/{{ p.prediction_id }}" method="POST"
+                                  onsubmit="return confirm('Delete this record?');"
+                                  class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    🗑
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -56,7 +111,6 @@
         </div>
     </div>
 </div>
-
 {% else %}
 <div class="alert alert-info text-center">
     <h4>No predictions yet</h4>

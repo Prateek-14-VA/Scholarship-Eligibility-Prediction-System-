@@ -5,7 +5,7 @@ Flask web application for Scholarship Eligibility Prediction System.
 import sys
 import json
 from pathlib import Path
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, Response
 
 # Add scripts folder to import path
 SCRIPTS_DIR = Path(__file__).parent / "scripts"
@@ -13,7 +13,10 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 from predictor import predict_student
 from recommend import recommend_scholarships, total_award
-from db import save_prediction, get_all_predictions, get_stats
+from db import (
+    save_prediction, get_all_predictions, get_stats,
+    delete_prediction, clear_all_history, search_predictions
+)
 
 app = Flask(__name__)
 
@@ -103,10 +106,59 @@ def dashboard():
 
 @app.route("/history")
 def history():
-    """Show recent prediction history."""
-    predictions = get_all_predictions(limit=100)
-    return render_template("history.html", predictions=predictions)
+    """Show prediction history with optional search/filter."""
+    name_query = request.args.get("name", "").strip()
+    category = request.args.get("category", "").strip()
+    eligible = request.args.get("eligible", "").strip()
 
+    if name_query or category or eligible:
+        predictions = search_predictions(name_query, category, eligible)
+    else:
+        predictions = get_all_predictions(limit=200)
+
+    return render_template(
+        "history.html",
+        predictions=predictions,
+        name_query=name_query,
+        category_filter=category,
+        eligible_filter=eligible,
+    )
+
+
+@app.route("/delete/<int:prediction_id>", methods=["POST"])
+def delete_record(prediction_id):
+    """Delete a single prediction."""
+    delete_prediction(prediction_id)
+    return redirect(url_for("history"))
+
+
+@app.route("/clear_history", methods=["POST"])
+def clear_history():
+    """Delete all history."""
+    clear_all_history()
+    return redirect(url_for("history"))
+
+
+@app.route("/export_csv")
+def export_csv():
+    """Download history as CSV."""
+    predictions = get_all_predictions(limit=1000)
+
+    lines = ["Date,Name,Age,Gender,Category,Education,Marks,Attendance,Income,Eligible,Score"]
+    for p in predictions:
+        date_str = p["created_at"].strftime("%Y-%m-%d %H:%M") if p["created_at"] else ""
+        lines.append(
+            f'{date_str},{p["name"]},{p["age"]},{p["gender"]},{p["category"]},'
+            f'{p["education"]},{p["marks"]},{p["attendance"]},{p["income"]},'
+            f'{"Yes" if p["eligible"] else "No"},{p["score"]}'
+        )
+
+    csv_content = "\n".join(lines)
+    return Response(
+        csv_content,
+        mimetype="text/csv",
+        headers={"Content-Disposition": "attachment;filename=history.csv"}
+    )
 
 @app.route("/admin")
 def admin():
