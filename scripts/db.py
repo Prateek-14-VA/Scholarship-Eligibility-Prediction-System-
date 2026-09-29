@@ -1,35 +1,52 @@
 """
 Database helper functions for the Scholarship System.
+Auto-detects PostgreSQL (Render / cloud) or MySQL (local dev).
 """
 
-import mysql.connector
-from mysql.connector import Error
+import os
 from pathlib import Path
 
-# Database config — CHANGE PASSWORD to your MySQL password
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "2004",
-    "database": "scholarship_db",
-}
+# ---- Detect which DB to use ----
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
+if DATABASE_URL:
+    import psycopg2
+    import psycopg2.extras
 
-def get_connection():
-    """Return a new MySQL connection."""
-    return mysql.connector.connect(**DB_CONFIG)
+    USE_POSTGRES = True
+
+    def get_connection():
+        return psycopg2.connect(DATABASE_URL)
+
+    def _cursor_dict(conn):
+        return conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+else:
+    import mysql.connector
+    from mysql.connector import Error as MySQLError
+
+    USE_POSTGRES = False
+
+    DB_CONFIG = {
+        "host": "localhost",
+        "user": "root",
+        "password": "2004",
+        "database": "scholarship_db",
+    }
+
+    def get_connection():
+        return mysql.connector.connect(**DB_CONFIG)
+
+    def _cursor_dict(conn):
+        return conn.cursor(dictionary=True)
 
 
 def save_prediction(student, prediction, recommendations):
-    """
-    If a student with the same name already exists, update their record.
-    Otherwise insert a new student. Old predictions are replaced.
-    """
+    """Save or update student + prediction + recommendations."""
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = _cursor_dict(conn)
 
-        # 1. Check if student already exists (by name)
         cursor.execute(
             "SELECT id FROM students WHERE name = %s LIMIT 1",
             (student["name"],)
@@ -37,52 +54,36 @@ def save_prediction(student, prediction, recommendations):
         existing = cursor.fetchone()
 
         if existing:
-            # --- UPDATE existing student ---
             student_id = existing["id"]
-
             cursor.execute("""
                 UPDATE students
                 SET age=%s, gender=%s, category=%s, disability=%s,
                     education=%s, marks=%s, attendance=%s, income=%s
                 WHERE id=%s
             """, (
-                student["age"],
-                student["gender"],
-                student["category"],
-                student["disability"],
-                student["education"],
-                student["marks"],
-                student["attendance"],
-                student["income"],
-                student_id,
+                student["age"], student["gender"], student["category"],
+                student["disability"], student["education"],
+                student["marks"], student["attendance"],
+                student["income"], student_id,
             ))
-
-            # Delete old predictions for this student
-            cursor.execute(
-                "DELETE FROM predictions WHERE student_id = %s",
-                (student_id,)
-            )
-
+            cursor.execute("DELETE FROM predictions WHERE student_id = %s", (student_id,))
         else:
-            # --- INSERT new student ---
             cursor.execute("""
                 INSERT INTO students
                     (name, age, gender, category, disability, education, marks, attendance, income)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
-                student["name"],
-                student["age"],
-                student["gender"],
-                student["category"],
-                student["disability"],
-                student["education"],
-                student["marks"],
-                student["attendance"],
-                student["income"],
+                student["name"], student["age"], student["gender"],
+                student["category"], student["disability"],
+                student["education"], student["marks"],
+                student["attendance"], student["income"],
             ))
-            student_id = cursor.lastrowid
+            if USE_POSTGRES:
+                cursor.execute("SELECT lastval() AS id")
+                student_id = cursor.fetchone()["id"]
+            else:
+                student_id = cursor.lastrowid
 
-        # 2. Insert new prediction
         cursor.execute("""
             INSERT INTO predictions (student_id, eligible, score)
             VALUES (%s, %s, %s)
@@ -91,20 +92,20 @@ def save_prediction(student, prediction, recommendations):
             1 if prediction["eligible"] else 0,
             prediction["score"],
         ))
-        prediction_id = cursor.lastrowid
+        if USE_POSTGRES:
+            cursor.execute("SELECT lastval() AS id")
+            prediction_id = cursor.fetchone()["id"]
+        else:
+            prediction_id = cursor.lastrowid
 
-        # 3. Insert recommendations
         for rec in recommendations:
             cursor.execute("""
                 INSERT INTO recommendations
                     (prediction_id, scholarship_name, provider, amount, portal)
                 VALUES (%s, %s, %s, %s, %s)
             """, (
-                prediction_id,
-                rec["name"],
-                rec["provider"],
-                rec["amount"],
-                rec["portal"],
+                prediction_id, rec["name"], rec["provider"],
+                rec["amount"], rec["portal"],
             ))
 
         conn.commit()
@@ -112,16 +113,16 @@ def save_prediction(student, prediction, recommendations):
         conn.close()
         return student_id
 
-    except Error as e:
-        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"Database error in save_prediction: {e}")
         return None
+
 
 def get_all_predictions(limit=50):
     """Return recent predictions joined with student info."""
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-
+        cursor = _cursor_dict(conn)
         cursor.execute("""
             SELECT
                 p.id AS prediction_id,
@@ -135,22 +136,20 @@ def get_all_predictions(limit=50):
             ORDER BY p.created_at DESC
             LIMIT %s
         """, (limit,))
-
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        return rows
-
-    except Error as e:
-        print(f"Database error: {e}")
+        return [dict(r) for r in rows]
+    except Exception as e:
+        print(f"Database error in get_all_predictions: {e}")
         return []
 
 
 def get_stats():
-    """Return aggregate stats for the admin panel."""
+    """Return aggregate stats."""
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = _cursor_dict(conn)
 
         cursor.execute("SELECT COUNT(*) AS total FROM predictions")
         total = cursor.fetchone()["total"]
@@ -165,37 +164,36 @@ def get_stats():
         conn.close()
 
         return {
-            "total": total,
-            "eligible": eligible,
-            "not_eligible": total - eligible,
+            "total": int(total),
+            "eligible": int(eligible),
+            "not_eligible": int(total - eligible),
             "avg_score": round(float(avg_score), 2),
         }
-
-    except Error as e:
-        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"Database error in get_stats: {e}")
         return {"total": 0, "eligible": 0, "not_eligible": 0, "avg_score": 0}
 
 
 def delete_prediction(prediction_id):
-    """Delete a prediction and its recommendations (cascade)."""
+    """Delete a prediction."""
     try:
         conn = get_connection()
-        cursor = conn.cursor()
+        cursor = _cursor_dict(conn)
         cursor.execute("DELETE FROM predictions WHERE id = %s", (prediction_id,))
         conn.commit()
         cursor.close()
         conn.close()
         return True
-    except Error as e:
-        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"Database error in delete_prediction: {e}")
         return False
 
 
 def clear_all_history():
-    """Delete ALL students, predictions, and recommendations."""
+    """Delete all data."""
     try:
         conn = get_connection()
-        cursor = conn.cursor()
+        cursor = _cursor_dict(conn)
         cursor.execute("DELETE FROM recommendations")
         cursor.execute("DELETE FROM predictions")
         cursor.execute("DELETE FROM students")
@@ -203,16 +201,16 @@ def clear_all_history():
         cursor.close()
         conn.close()
         return True
-    except Error as e:
-        print(f"Database error: {e}")
+    except Exception as e:
+        print(f"Database error in clear_all_history: {e}")
         return False
 
 
 def search_predictions(name_query="", category="", eligible_filter=""):
-    """Search predictions with optional filters."""
+    """Search predictions with filters."""
     try:
         conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = _cursor_dict(conn)
 
         query = """
             SELECT
@@ -246,8 +244,7 @@ def search_predictions(name_query="", category="", eligible_filter=""):
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
-        return rows
-
-    except Error as e:
-        print(f"Database error: {e}")
+        return [dict(r) for r in rows]
+    except Exception as e:
+        print(f"Database error in search_predictions: {e}")
         return []
