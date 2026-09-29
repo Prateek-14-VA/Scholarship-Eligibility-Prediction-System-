@@ -23,6 +23,7 @@
         </div>
         <div class="row mt-2">
             <div class="col-md-3"><strong>Education:</strong> {{ student.education }}</div>
+            <div class="col-md-3"><strong>Course:</strong> {{ student.course }}</div>
             <div class="col-md-3"><strong>Marks:</strong> {{ student.marks }}%</div>
             <div class="col-md-3"><strong>Attendance:</strong> {{ student.attendance }}%</div>
             <div class="col-md-3"><strong>Income:</strong> Rs. {{ "{:,}".format(student.income) }}</div>
@@ -44,7 +45,38 @@
         <h1 class="display-4">{{ prediction.score }}%</h1>
     </div>
 </div>
-
+<!-- Eligibility Analysis -->
+{% if analysis %}
+<div class="card shadow mb-4">
+    <div class="card-header {% if prediction.eligible %}bg-success{% else %}bg-danger{% endif %} text-white">
+        <h4 class="mb-0">
+            {% if prediction.eligible %}
+                ✓ Why You're Eligible
+            {% else %}
+                ✗ Why You're Not Eligible
+            {% endif %}
+        </h4>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled mb-0">
+            {% for item in analysis %}
+            <li class="mb-2">
+                {% if item.status == 'pass' %}
+                    <span class="text-success fs-5">✓</span>
+                    <span>{{ item.message }}</span>
+                {% elif item.status == 'warn' %}
+                    <span class="text-warning fs-5">⚠</span>
+                    <span>{{ item.message }}</span>
+                {% else %}
+                    <span class="text-danger fs-5">✗</span>
+                    <span>{{ item.message }}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
 <!-- Recommended Scholarships Card -->
 <div class="card shadow mb-4">
     <div class="card-header bg-primary text-white">

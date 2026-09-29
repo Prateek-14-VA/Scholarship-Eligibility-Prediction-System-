@@ -58,11 +58,12 @@ def save_prediction(student, prediction, recommendations):
             cursor.execute("""
                 UPDATE students
                 SET age=%s, gender=%s, category=%s, disability=%s,
-                    education=%s, marks=%s, attendance=%s, income=%s
+                    education=%s, course=%s, marks=%s, attendance=%s, income=%s
                 WHERE id=%s
             """, (
                 student["age"], student["gender"], student["category"],
                 student["disability"], student["education"],
+                student.get("course", "Not Specified"),
                 student["marks"], student["attendance"],
                 student["income"], student_id,
             ))
@@ -70,13 +71,13 @@ def save_prediction(student, prediction, recommendations):
         else:
             cursor.execute("""
                 INSERT INTO students
-                    (name, age, gender, category, disability, education, marks, attendance, income)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    (name, age, gender, category, disability, education, course, marks, attendance, income)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 student["name"], student["age"], student["gender"],
                 student["category"], student["disability"],
-                student["education"], student["marks"],
-                student["attendance"], student["income"],
+                student["education"], student.get("course", "Not Specified"),
+                student["marks"], student["attendance"], student["income"],
             ))
             if USE_POSTGRES:
                 cursor.execute("SELECT lastval() AS id")
@@ -134,7 +135,7 @@ def get_all_predictions(limit=50):
                 p.id AS prediction_id,
                 s.id AS student_id,
                 s.name,
-                s.age, s.gender, s.category, s.education,
+                s.age, s.gender, s.category, s.education, s.course,
                 s.marks, s.attendance, s.income,
                 p.eligible, p.score, p.created_at
             FROM predictions p
@@ -226,7 +227,7 @@ def search_predictions(name_query="", category="", eligible_filter=""):
                 p.id AS prediction_id,
                 s.id AS student_id,
                 s.name,
-                s.age, s.gender, s.category, s.education,
+                s.age, s.gender, s.category, s.education,s.course,
                 s.marks, s.attendance, s.income,
                 p.eligible, p.score, p.created_at
             FROM predictions p

@@ -11,7 +11,7 @@ from flask import Flask, render_template, request, redirect, url_for, Response
 SCRIPTS_DIR = Path(__file__).parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
-from predictor import predict_student
+from predictor import predict_student, analyze_eligibility
 from recommend import recommend_scholarships, total_award
 from db import (
     save_prediction, get_all_predictions, get_stats,
@@ -37,6 +37,7 @@ def predict():
         category = request.form.get("category", "")
         disability = request.form.get("disability", "")
         education = request.form.get("education", "")
+        course = request.form.get("course", "Not Specified")
         marks = float(request.form.get("marks", 0))
         attendance = float(request.form.get("attendance", 0))
         income = int(request.form.get("income", 0))
@@ -64,6 +65,7 @@ def predict():
             "category": category,
             "disability": disability,
             "education": education,
+            "course": course,
             "marks": marks,
             "attendance": attendance,
             "income": income,
@@ -72,6 +74,7 @@ def predict():
         prediction = predict_student(student)
         recommendations = recommend_scholarships(student)
         total = total_award(recommendations)
+        analysis = analyze_eligibility(student)
 
         save_prediction(student, prediction, recommendations)
 
@@ -81,6 +84,7 @@ def predict():
             prediction=prediction,
             recommendations=recommendations,
             total=total,
+            analysis=analysis,
         )
 
     except ValueError:

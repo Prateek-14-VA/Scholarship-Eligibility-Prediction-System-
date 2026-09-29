@@ -1,31 +1,97 @@
-body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+/* Wizard Progress Bar */
+.wizard-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
 }
 
-.card {
-    border-radius: 10px;
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 auto;
+}
+
+.step-circle {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    border: 3px solid #e9ecef;
+}
+
+.progress-step.active .step-circle {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.15);
+}
+
+.progress-step.completed .step-circle {
+    background: #198754;
+    color: white;
+    border-color: #198754;
+}
+
+.step-label {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.progress-step.active .step-label {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.progress-step.completed .step-label {
+    color: #198754;
+    font-weight: 600;
+}
+
+.progress-line {
+    flex: 1;
+    height: 3px;
+    background: #e9ecef;
+    margin: 0 10px;
+    position: relative;
+    top: -15px;
+}
+
+/* Wizard Steps */
+.wizard-step {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.wizard-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card.shadow-lg {
+    border-radius: 15px;
     border: none;
 }
 
-.card-header {
-    border-radius: 10px 10px 0 0 !important;
+.form-control-lg, .form-select-lg {
+    border-radius: 10px;
 }
 
-.navbar-brand {
+.form-label {
     font-weight: 600;
-}
-
-.display-4 {
-    font-weight: 700;
-    color: #0d6efd;
-}
-
-.table thead th {
-    font-weight: 600;
-}
-
-footer {
-    border-top: 1px solid #dee2e6;
-    margin-top: 40px;
+    color: #495057;
 }

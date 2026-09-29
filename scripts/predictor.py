@@ -104,4 +104,86 @@ if __name__ == "__main__":
     for k, v in result.items():
         print(f"  {k:<12}: {v}")
     print("=" * 55)
-    
+
+def analyze_eligibility(student):
+    """
+    Rule-based analysis of why a student is eligible or not.
+    Returns a list of dicts: [{status, message}]
+    """
+    checks = []
+
+    # Marks check
+    if student["marks"] >= 75:
+        checks.append({
+            "status": "pass",
+            "message": f"Marks requirement met: {student['marks']}% (≥ 75%)"
+        })
+    elif student["marks"] >= 60:
+        checks.append({
+            "status": "warn",
+            "message": f"Marks partially meet: {student['marks']}% (ideal ≥ 75%)"
+        })
+    else:
+        checks.append({
+            "status": "fail",
+            "message": f"Marks too low: {student['marks']}% (required ≥ 75%)"
+        })
+
+    # Attendance check
+    if student["attendance"] >= 75:
+        checks.append({
+            "status": "pass",
+            "message": f"Attendance sufficient: {student['attendance']}% (≥ 75%)"
+        })
+    elif student["attendance"] >= 60:
+        checks.append({
+            "status": "warn",
+            "message": f"Attendance partially meets: {student['attendance']}% (ideal ≥ 75%)"
+        })
+    else:
+        checks.append({
+            "status": "fail",
+            "message": f"Attendance too low: {student['attendance']}% (required ≥ 75%)"
+        })
+
+    # Income check (depends on category)
+    category = student["category"]
+    if category in ["SC", "ST", "OBC", "Minority", "EWS"]:
+        income_limit = 450000
+    else:
+        income_limit = 250000
+
+    if student["gender"] == "Female":
+        income_limit = max(income_limit, 300000)
+
+    if student["income"] <= income_limit:
+        checks.append({
+            "status": "pass",
+            "message": f"Income within limit: ₹{student['income']:,} (≤ ₹{income_limit:,})"
+        })
+    else:
+        checks.append({
+            "status": "fail",
+            "message": f"Income exceeds limit: ₹{student['income']:,} (limit ₹{income_limit:,} for {category})"
+        })
+
+    # Age check
+    if 17 <= student["age"] <= 30:
+        checks.append({
+            "status": "pass",
+            "message": f"Age within range: {student['age']} years (17–30)"
+        })
+    else:
+        checks.append({
+            "status": "fail",
+            "message": f"Age out of range: {student['age']} years (allowed 17–30)"
+        })
+
+    # Disability relaxation note
+    if student["disability"] == "Yes":
+        checks.append({
+            "status": "pass",
+            "message": "Disability relaxation applied (reduced marks requirement)"
+        })
+
+    return checks
