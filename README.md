@@ -135,3 +135,17 @@ Prateek Veeresh Aggimath
 MCA Student
 Acharya Institute of Technology
 prateekvaggimath@gmail.com
+
+## 🌐 Live Demo
+
+**URL:** https://scholarship-eligibility-prediction-system.onrender.com
+
+> ⚠️ **Note:** The app runs on Render's free tier. First load after inactivity takes 30–60 seconds.
+
+### Pages
+- **Home** — Check a student's eligibility
+- **Scholarships** — Browse all 14 schemes
+- **Dashboard** — Analytics charts
+- **History** — Past predictions
+- **Admin** — Aggregate stats
+- **About** — System information
