@@ -84,12 +84,18 @@ def save_prediction(student, prediction, recommendations):
             else:
                 student_id = cursor.lastrowid
 
+                        # PostgreSQL uses TRUE/FALSE, MySQL uses 1/0
+        if USE_POSTGRES:
+            eligible_val = bool(prediction["eligible"])
+        else:
+            eligible_val = 1 if prediction["eligible"] else 0
+
         cursor.execute("""
             INSERT INTO predictions (student_id, eligible, score)
             VALUES (%s, %s, %s)
         """, (
             student_id,
-            1 if prediction["eligible"] else 0,
+            eligible_val,
             prediction["score"],
         ))
         if USE_POSTGRES:
@@ -154,7 +160,10 @@ def get_stats():
         cursor.execute("SELECT COUNT(*) AS total FROM predictions")
         total = cursor.fetchone()["total"]
 
-        cursor.execute("SELECT COUNT(*) AS c FROM predictions WHERE eligible = 1")
+        if USE_POSTGRES:
+            cursor.execute("SELECT COUNT(*) AS c FROM predictions WHERE eligible = TRUE")
+        else:
+            cursor.execute("SELECT COUNT(*) AS c FROM predictions WHERE eligible = 1")
         eligible = cursor.fetchone()["c"]
 
         cursor.execute("SELECT AVG(score) AS avg_score FROM predictions")
@@ -236,7 +245,10 @@ def search_predictions(name_query="", category="", eligible_filter=""):
 
         if eligible_filter in ("0", "1"):
             query += " AND p.eligible = %s"
-            params.append(int(eligible_filter))
+            if USE_POSTGRES:
+                params.append(eligible_filter == "1")
+            else:
+                params.append(int(eligible_filter))
 
         query += " ORDER BY p.created_at DESC LIMIT 200"
 
