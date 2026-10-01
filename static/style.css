@@ -1,4 +1,220 @@
-/* Wizard Progress Bar */
+/* =========================================================
+   Scholarship Eligibility System — Design System
+   Friendly / Education Theme
+   ========================================================= */
+
+:root {
+    --primary: #0D9488;
+    --primary-dark: #0F766E;
+    --primary-light: #CCFBF1;
+    --accent: #F97316;
+    --accent-light: #FED7AA;
+    --success: #10B981;
+    --danger: #EF4444;
+    --warning: #F59E0B;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #0F172A;
+    --text-muted: #64748B;
+    --border: #E2E8F0;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+    --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.12);
+    --radius: 14px;
+    --radius-sm: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+    color: var(--text);
+    font-weight: 700;
+}
+
+.text-accent { color: var(--accent); }
+.text-primary { color: var(--primary) !important; }
+
+/* =========================================================
+   Navbar
+   ========================================================= */
+.navbar {
+    padding: 0.75rem 0;
+    background: #fff;
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.brand-text {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text);
+}
+
+.navbar .nav-link {
+    color: var(--text) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.navbar .nav-link:hover {
+    background: var(--primary-light);
+    color: var(--primary-dark) !important;
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+.btn {
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-primary,
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.btn-primary:hover,
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.35);
+    color: #fff;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+}
+
+.btn-outline-secondary {
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    background: #fff;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--bg);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-lg {
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+.card {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+    background: var(--card);
+}
+
+.card:hover {
+    box-shadow: var(--shadow);
+}
+
+.card.shadow-lg {
+    box-shadow: var(--shadow-lg);
+    border: none;
+}
+
+.card-header {
+    border-bottom: 1px solid var(--border);
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    padding: 1.1rem 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* =========================================================
+   Form Controls
+   ========================================================= */
+.form-label {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+}
+
+.form-control,
+.form-select {
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.65rem 0.95rem;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    color: var(--text);
+    background-color: #fff;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.12);
+    outline: none;
+}
+
+.form-control-lg,
+.form-select-lg {
+    padding: 0.85rem 1.1rem;
+    font-size: 1rem;
+    border-radius: var(--radius-sm);
+}
+
+/* =========================================================
+   Wizard Progress Bar
+   ========================================================= */
 .wizard-progress {
     display: flex;
     align-items: center;
@@ -14,84 +230,362 @@
 }
 
 .step-circle {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: #e9ecef;
-    color: #6c757d;
+    background: #fff;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1.1rem;
+    font-weight: 700;
+    font-size: 1.05rem;
     transition: all 0.3s;
-    border: 3px solid #e9ecef;
+    border: 2.5px solid var(--border);
 }
 
 .progress-step.active .step-circle {
-    background: #0d6efd;
-    color: white;
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 5px rgba(13, 110, 253, 0.15);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 0 0 6px rgba(13, 148, 136, 0.15);
+    transform: scale(1.05);
 }
 
 .progress-step.completed .step-circle {
-    background: #198754;
-    color: white;
-    border-color: #198754;
+    background: var(--success);
+    color: #fff;
+    border-color: var(--success);
 }
 
 .step-label {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    color: #6c757d;
-    font-weight: 500;
+    margin-top: 10px;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .progress-step.active .step-label {
-    color: #0d6efd;
-    font-weight: 600;
+    color: var(--primary-dark);
 }
 
 .progress-step.completed .step-label {
-    color: #198754;
-    font-weight: 600;
+    color: var(--success);
 }
 
 .progress-line {
     flex: 1;
     height: 3px;
-    background: #e9ecef;
-    margin: 0 10px;
+    background: var(--border);
+    margin: 0 12px;
     position: relative;
-    top: -15px;
+    top: -16px;
+    border-radius: 2px;
 }
 
-/* Wizard Steps */
+/* =========================================================
+   Wizard Steps
+   ========================================================= */
 .wizard-step {
     display: none;
-    animation: fadeIn 0.3s ease-in;
+    animation: fadeInUp 0.35s ease-out;
 }
 
 .wizard-step.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.card.shadow-lg {
-    border-radius: 15px;
-    border: none;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.form-control-lg, .form-select-lg {
-    border-radius: 10px;
+/* =========================================================
+   Hero Section
+   ========================================================= */
+.hero-section {
+    padding: 3.5rem 0 3rem;
+    text-align: center;
 }
 
-.form-label {
+.hero-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto 2rem;
+}
+
+.hero-badges {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.hero-badge {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.hero-badge i {
+    color: var(--primary);
+}
+
+/* =========================================================
+   Status Badges
+   ========================================================= */
+.badge {
     font-weight: 600;
-    color: #495057;
+    padding: 0.5rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+}
+
+.badge.bg-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%) !important;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%) !important;
+}
+
+.badge.bg-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+}
+
+.badge.fs-4 {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.15rem !important;
+}
+
+/* =========================================================
+   Result Page
+   ========================================================= */
+.result-score {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 3.5rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin: 0.5rem 0;
+}
+
+.analysis-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.analysis-item:last-child {
+    border-bottom: none;
+}
+
+.analysis-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.analysis-icon.pass { color: var(--success); }
+.analysis-icon.warn { color: var(--warning); }
+.analysis-icon.fail { color: var(--danger); }
+
+/* =========================================================
+   Tables
+   ========================================================= */
+.table {
+    color: var(--text);
+    margin-bottom: 0;
+}
+
+.table thead th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+    padding: 0.9rem 0.75rem;
+    background: var(--bg);
+}
+
+.table tbody td {
+    padding: 0.85rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-hover tbody tr {
+    transition: background 0.15s;
+}
+
+.table-hover tbody tr:hover {
+    background: var(--primary-light);
+}
+
+/* =========================================================
+   Stat Cards
+   ========================================================= */
+.stat-card {
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-card .stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+}
+
+.stat-card .stat-sub {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+.stat-card-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.stat-card-success {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+}
+
+.stat-card-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #DC2626 100%);
+}
+
+.stat-card-accent {
+    background: linear-gradient(135deg, var(--accent) 0%, #EA580C 100%);
+}
+
+.stat-card i.stat-bg-icon {
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 6rem;
+    opacity: 0.12;
+}
+
+/* =========================================================
+   Alerts
+   ========================================================= */
+.alert {
+    border-radius: var(--radius-sm);
+    border: none;
+    padding: 1rem 1.25rem;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background: #FEF2F2;
+    color: #991B1B;
+    border-left: 4px solid var(--danger);
+}
+
+.alert-info {
+    background: #EFF6FF;
+    color: #1E40AF;
+    border-left: 4px solid #3B82F6;
+}
+
+.alert-success {
+    background: #F0FDF4;
+    color: #166534;
+    border-left: 4px solid var(--success);
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.footer-custom {
+    background: #fff;
+    border-top: 1px solid var(--border);
+}
+
+.footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.92rem;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--primary);
+}
+
+/* =========================================================
+   Utility
+   ========================================================= */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 1rem; }
+    .result-score { font-size: 2.75rem; }
+    .stat-card .stat-value { font-size: 1.8rem; }
+    .wizard-progress { padding: 0 5px; }
+    .step-circle { width: 38px; height: 38px; font-size: 0.9rem; }
+    .step-label { font-size: 0.72rem; }
+    .progress-line { margin: 0 4px; }
 }
