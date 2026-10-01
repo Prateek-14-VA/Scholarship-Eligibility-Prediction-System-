@@ -23,7 +23,6 @@ if DATABASE_URL:
 
 else:
     import mysql.connector
-    from mysql.connector import Error as MySQLError
 
     USE_POSTGRES = False
 
@@ -85,7 +84,6 @@ def save_prediction(student, prediction, recommendations):
             else:
                 student_id = cursor.lastrowid
 
-                        # PostgreSQL uses TRUE/FALSE, MySQL uses 1/0
         if USE_POSTGRES:
             eligible_val = bool(prediction["eligible"])
         else:
@@ -227,7 +225,7 @@ def search_predictions(name_query="", category="", eligible_filter=""):
                 p.id AS prediction_id,
                 s.id AS student_id,
                 s.name,
-                s.age, s.gender, s.category, s.education,s.course,
+                s.age, s.gender, s.category, s.education, s.course,
                 s.marks, s.attendance, s.income,
                 p.eligible, p.score, p.created_at
             FROM predictions p
