@@ -7,16 +7,27 @@ import json
 from pathlib import Path
 from flask import Flask, render_template, request, redirect, url_for, Response
 
-# Add scripts folder to import path
+print("=== APP STARTING ===", file=sys.stderr, flush=True)
+
 SCRIPTS_DIR = Path(__file__).parent / "scripts"
 sys.path.insert(0, str(SCRIPTS_DIR))
 
+print("=== IMPORTING PREDICTOR ===", file=sys.stderr, flush=True)
 from predictor import predict_student, analyze_eligibility
+print("=== PREDICTOR OK ===", file=sys.stderr, flush=True)
+
+print("=== IMPORTING RECOMMEND ===", file=sys.stderr, flush=True)
 from recommend import recommend_scholarships, total_award
+print("=== RECOMMEND OK ===", file=sys.stderr, flush=True)
+
+print("=== IMPORTING DB ===", file=sys.stderr, flush=True)
 from db import (
     save_prediction, get_all_predictions, get_stats,
     delete_prediction, clear_all_history, search_predictions
 )
+print("=== DB OK ===", file=sys.stderr, flush=True)
+
+print("=== APP READY ===", file=sys.stderr, flush=True)
 
 app = Flask(__name__)
 
